@@ -1,11 +1,7 @@
-﻿using Ghostscript.NET;
-using Ghostscript.NET.Processor;
+﻿using Ghostscript.NET.Processor;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 // C:\Program Files (x86)\gs\gs9.27
 
@@ -23,10 +19,8 @@ namespace Pdf2ImageConverter
         {
             var outputDirectory = Path.GetDirectoryName(outputFile);
 
-            if (Directory.Exists(outputDirectory))
-            {
-                Directory.Delete(outputDirectory, true);
-            }
+            DirectoryUtility.DeleteDirectoryIfExists(outputDirectory);
+
             Directory.CreateDirectory(outputDirectory);
 
             using (GhostscriptProcessor ghostscript = new GhostscriptProcessor())
@@ -54,7 +48,6 @@ namespace Pdf2ImageConverter
                     default:
                         throw new Exception($"not support ImageFormat:{imageFormat}");
                 }
-                //switches.Add("-r96");
                 switches.Add("-r200");
 
                 switches.Add(@"-sOutputFile=" + outputFile);
@@ -64,7 +57,6 @@ namespace Pdf2ImageConverter
                 ghostscript.Process(switches.ToArray());
             }
         }
-
 
         void ghostscript_Processing(object sender, GhostscriptProcessorProcessingEventArgs e)
         {
